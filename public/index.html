@@ -1,0 +1,498 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+<meta charset="UTF-8">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Dice Master</title>
+
+<link rel="stylesheet" href="style.css">
+
+</head>
+
+<body>
+
+<div class="container">
+
+    <!-- LOGIN / REGISTER -->
+
+    <div id="authScreen" class="card">
+
+        <img src="logo.png" class="logo">
+
+        <h1>Dice Master</h1>
+
+        <p class="subtitle">
+            Roll • Predict • Win
+        </p>
+
+        <div class="tabs">
+
+            <button id="showLogin">
+                Login
+            </button>
+
+            <button id="showRegister">
+                Register
+            </button>
+
+        </div>
+
+        <div id="loginForm">
+
+            <input
+                id="loginUsername"
+                placeholder="Username">
+
+            <input
+                id="loginPassword"
+                type="password"
+                placeholder="Password">
+
+            <button id="loginBtn">
+
+                LOGIN
+
+            </button>
+
+        </div>
+
+        <div
+            id="registerForm"
+            style="display:none;">
+
+            <input
+                id="registerUsername"
+                placeholder="Username">
+
+            <input
+                id="registerPassword"
+                type="password"
+                placeholder="Password">
+
+            <button id="registerBtn">
+
+                CREATE ACCOUNT
+
+            </button>
+
+        </div>
+
+        <p id="authMessage"></p>
+
+    </div>
+
+    <!-- GAME -->
+
+    <div
+        id="gameScreen"
+        style="display:none;">
+
+        <div class="topbar">
+
+    <div class="player-info">
+
+        👤 <span id="playerName"></span>
+
+    </div>
+
+    <div class="wallet-info">
+
+        💰 KSh <span id="balance">0.00</span>
+
+    </div>
+
+    <div class="wallet-buttons">
+
+        <button id="depositBtn" class="wallet-btn">
+
+            Deposit
+
+        </button>
+
+        <button id="withdrawBtn" class="wallet-btn">
+
+            Withdraw
+
+        </button>
+
+        <button id="logoutBtn" class="logout-btn">
+
+            Logout
+
+        </button>
+
+    </div>
+
+</div>
+
+<!-- ===========================
+     DEPOSIT MODAL
+=========================== -->
+
+<div id="depositModal" class="modal">
+
+    <div class="modal-content">
+
+        <h2>Deposit Funds</h2>
+
+        <input
+            type="text"
+            id="depositPhone"
+            placeholder="07XXXXXXXX">
+
+        <input
+            type="number"
+            id="depositAmount"
+            placeholder="Amount">
+
+        <button id="confirmDeposit">
+
+            Confirm Deposit
+
+        </button>
+
+        <button id="closeDeposit">
+
+            Close
+
+        </button>
+
+    </div>
+
+</div>
+
+<!-- ===========================
+     WITHDRAW MODAL
+=========================== -->
+
+<div id="withdrawModal" class="modal">
+
+    <div class="modal-content">
+
+        <h2>Withdraw Funds</h2>
+
+        <input
+            type="text"
+            id="withdrawPhone"
+            placeholder="07XXXXXXXX">
+
+        <input
+            type="number"
+            id="withdrawAmount"
+            placeholder="Amount">
+
+        <button id="confirmWithdraw">
+
+            Confirm Withdrawal
+
+        </button>
+
+        <button id="closeWithdraw">
+
+            Close
+
+        </button>
+
+    </div>
+
+</div>
+
+        <div class="card">
+
+            <label>
+
+                Stake
+
+            </label>
+
+            <input
+
+                id="stake"
+
+                type="number"
+
+                min="10"
+
+                placeholder="Minimum 10">
+
+        </div>
+
+        <!-- 3 DICE -->
+
+        <div class="dice-area">
+
+    <div class="scene">
+
+        <div class="cube" id="dice1">
+
+            <div class="face front">
+                <span class="pip center"></span>
+            </div>
+
+            <div class="face back">
+                <span class="pip top-left"></span>
+                <span class="pip top-right"></span>
+                <span class="pip middle-left"></span>
+                <span class="pip middle-right"></span>
+                <span class="pip bottom-left"></span>
+                <span class="pip bottom-right"></span>
+            </div>
+
+            <div class="face right">
+                <span class="pip top-left"></span>
+                <span class="pip center"></span>
+                <span class="pip bottom-right"></span>
+            </div>
+
+            <div class="face left">
+                <span class="pip top-left"></span>
+                <span class="pip top-right"></span>
+                <span class="pip bottom-left"></span>
+                <span class="pip bottom-right"></span>
+            </div>
+
+            <div class="face top">
+                <span class="pip top-left"></span>
+                <span class="pip top-right"></span>
+                <span class="pip center"></span>
+                <span class="pip bottom-left"></span>
+                <span class="pip bottom-right"></span>
+            </div>
+
+            <div class="face bottom">
+                <span class="pip top-left"></span>
+                <span class="pip bottom-right"></span>
+            </div>
+
+        </div>
+
+    </div>
+
+    <div class="scene">
+
+        <div class="cube" id="dice2">
+
+            <div class="face front">
+                <span class="pip center"></span>
+            </div>
+
+            <div class="face back">
+                <span class="pip top-left"></span>
+                <span class="pip top-right"></span>
+                <span class="pip middle-left"></span>
+                <span class="pip middle-right"></span>
+                <span class="pip bottom-left"></span>
+                <span class="pip bottom-right"></span>
+            </div>
+
+            <div class="face right">
+                <span class="pip top-left"></span>
+                <span class="pip center"></span>
+                <span class="pip bottom-right"></span>
+            </div>
+
+            <div class="face left">
+                <span class="pip top-left"></span>
+                <span class="pip top-right"></span>
+                <span class="pip bottom-left"></span>
+                <span class="pip bottom-right"></span>
+            </div>
+
+            <div class="face top">
+                <span class="pip top-left"></span>
+                <span class="pip top-right"></span>
+                <span class="pip center"></span>
+                <span class="pip bottom-left"></span>
+                <span class="pip bottom-right"></span>
+            </div>
+
+            <div class="face bottom">
+                <span class="pip top-left"></span>
+                <span class="pip bottom-right"></span>
+            </div>
+
+        </div>
+
+    </div>
+
+    <div class="scene">
+
+        <div class="cube" id="dice3">
+
+            <div class="face front">
+                <span class="pip center"></span>
+            </div>
+
+            <div class="face back">
+                <span class="pip top-left"></span>
+                <span class="pip top-right"></span>
+                <span class="pip middle-left"></span>
+                <span class="pip middle-right"></span>
+                <span class="pip bottom-left"></span>
+                <span class="pip bottom-right"></span>
+            </div>
+
+            <div class="face right">
+                <span class="pip top-left"></span>
+                <span class="pip center"></span>
+                <span class="pip bottom-right"></span>
+            </div>
+
+            <div class="face left">
+                <span class="pip top-left"></span>
+                <span class="pip top-right"></span>
+                <span class="pip bottom-left"></span>
+                <span class="pip bottom-right"></span>
+            </div>
+
+            <div class="face top">
+                <span class="pip top-left"></span>
+                <span class="pip top-right"></span>
+                <span class="pip center"></span>
+                <span class="pip bottom-left"></span>
+                <span class="pip bottom-right"></span>
+            </div>
+
+            <div class="face bottom">
+                <span class="pip top-left"></span>
+                <span class="pip bottom-right"></span>
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+        <div class="resultBox">
+
+            <h2>
+
+                Total
+
+                <span id="total">
+
+                    0
+
+                </span>
+
+            </h2>
+
+            <h3>
+
+                <span id="result">
+
+                    -
+
+                </span>
+
+            </h3>
+
+        </div>
+
+        <div class="buttons">
+
+            <button
+                class="even"
+
+                id="evenBtn">
+
+                EVEN
+
+            </button>
+
+            <button
+                class="odd"
+
+                id="oddBtn">
+
+                ODD
+
+            </button>
+
+        </div>
+
+        <div
+            id="message">
+
+        </div>
+
+        <div class="wallet">
+
+            <button id="depositBtn">
+
+                Deposit
+
+            </button>
+
+            <button id="withdrawBtn">
+
+                Withdraw
+
+            </button>
+
+        </div>
+
+        <div class="stats">
+
+            <div>
+
+                Wins
+
+                <span id="wins">
+
+                    0
+
+                </span>
+
+            </div>
+
+            <div>
+
+                Losses
+
+                <span id="losses">
+
+                    0
+
+                </span>
+
+            </div>
+
+        </div>
+
+        <div class="history">
+
+            <h2>
+
+                Recent Bets
+
+            </h2>
+
+            <ul id="history">
+
+            </ul>
+
+        </div>
+
+        <button
+            id="logoutBtn"
+            class="logout">
+
+            Logout
+
+        </button>
+
+    </div>
+
+</div>
+
+<script src="script.js"></script>
+
+</body>
+
+</html>

@@ -1,0 +1,1048 @@
+/* ==========================================
+   DICE MASTER V2
+   STYLE.CSS
+   PART 1
+========================================== */
+
+*{
+
+    margin:0;
+
+    padding:0;
+
+    box-sizing:border-box;
+
+    font-family:Arial,Helvetica,sans-serif;
+
+}
+
+body{
+
+    background:#111;
+
+    color:#fff;
+
+    min-height:100vh;
+
+}
+
+.container{
+
+    width:100%;
+
+    max-width:550px;
+
+    margin:auto;
+
+    padding:20px;
+
+}
+
+.card{
+
+    background:#1b1b1b;
+
+    border:1px solid #2f2f2f;
+
+    border-radius:15px;
+
+    padding:20px;
+
+    margin-bottom:20px;
+
+}
+
+.logo{
+
+    width:120px;
+
+    display:block;
+
+    margin:20px auto;
+
+}
+
+h1{
+
+    text-align:center;
+
+    color:#f4c542;
+
+    margin-bottom:10px;
+
+}
+
+.subtitle{
+
+    text-align:center;
+
+    color:#aaa;
+
+    margin-bottom:25px;
+
+}
+
+.tabs{
+
+    display:flex;
+
+    gap:10px;
+
+    margin-bottom:20px;
+
+}
+
+.tabs button{
+
+    flex:1;
+
+}
+
+input{
+
+    width:100%;
+
+    padding:14px;
+
+    margin-bottom:15px;
+
+    border:none;
+
+    outline:none;
+
+    border-radius:10px;
+
+    background:#2a2a2a;
+
+    color:white;
+
+    font-size:16px;
+
+}
+
+button{
+
+    cursor:pointer;
+
+    transition:.25s;
+
+}
+
+#loginBtn,
+
+#registerBtn{
+
+    width:100%;
+
+    padding:14px;
+
+    border:none;
+
+    border-radius:10px;
+
+    background:#f4c542;
+
+    color:#111;
+
+    font-size:17px;
+
+    font-weight:bold;
+
+}
+
+#loginBtn:hover,
+
+#registerBtn:hover{
+
+    transform:translateY(-2px);
+
+}
+
+#authMessage{
+
+    margin-top:15px;
+
+    text-align:center;
+
+    color:#6cff7c;
+
+}
+/* ==========================================
+   DICE MASTER V2
+   STYLE.CSS
+   PART 2
+========================================== */
+
+/* ---------- TOP BAR ---------- */
+
+.topbar{
+
+    display:flex;
+
+    justify-content:space-between;
+
+    align-items:center;
+
+    background:#1b1b1b;
+
+    border-radius:15px;
+
+    padding:15px 20px;
+
+    margin-bottom:20px;
+
+    border:1px solid #2f2f2f;
+
+}
+
+.topbar strong{
+
+    color:#f4c542;
+
+    font-size:20px;
+
+}
+
+/* ---------- STAKE ---------- */
+
+label{
+
+    display:block;
+
+    margin-bottom:10px;
+
+    color:#ccc;
+
+    font-weight:bold;
+
+}
+
+/* ---------- DICE AREA ---------- */
+
+/* =====================================
+   3D DICE SYSTEM
+===================================== */
+
+.dice-area{
+
+    display:flex;
+
+    justify-content:center;
+
+    gap:40px;
+
+    margin:40px 0;
+
+}
+
+.scene{
+
+    width:90px;
+
+    height:90px;
+
+    perspective:800px;
+
+}
+
+.cube{
+
+    width:90px;
+
+    height:90px;
+
+    position:relative;
+
+    transform-style:preserve-3d;
+
+    transition:transform 1.2s cubic-bezier(.17,.84,.44,1);
+
+}
+
+.face{
+
+    position:absolute;
+
+    width:90px;
+
+    height:90px;
+
+    background:white;
+
+    border-radius:14px;
+
+    border:2px solid #d9d9d9;
+
+    box-shadow:
+
+    inset 0 0 10px rgba(255,255,255,.9),
+
+    0 10px 20px rgba(0,0,0,.35);
+
+}
+
+/* Face Positions */
+
+.front{
+
+    transform:translateZ(45px);
+
+}
+
+.back{
+
+    transform:rotateY(180deg) translateZ(45px);
+
+}
+
+.right{
+
+    transform:rotateY(90deg) translateZ(45px);
+
+}
+
+.left{
+
+    transform:rotateY(-90deg) translateZ(45px);
+
+}
+
+.top{
+
+    transform:rotateX(90deg) translateZ(45px);
+
+}
+
+.bottom{
+
+    transform:rotateX(-90deg) translateZ(45px);
+
+}
+
+/* ---------- PIPS ---------- */
+
+.pip{
+
+    position:absolute;
+
+    width:14px;
+
+    height:14px;
+
+    background:#111;
+
+    border-radius:50%;
+
+}
+
+/* positions */
+
+.center{
+
+    top:50%;
+
+    left:50%;
+
+    transform:translate(-50%,-50%);
+
+}
+
+.top-left{
+
+    top:15px;
+
+    left:15px;
+
+}
+
+.top-right{
+
+    top:15px;
+
+    right:15px;
+
+}
+
+.middle-left{
+
+    top:50%;
+
+    left:15px;
+
+    transform:translateY(-50%);
+
+}
+
+.middle-right{
+
+    top:50%;
+
+    right:15px;
+
+    transform:translateY(-50%);
+
+}
+
+.bottom-left{
+
+    left:15px;
+
+    bottom:15px;
+
+}
+
+.bottom-right{
+
+    right:15px;
+
+    bottom:15px;
+
+}
+
+/* ---------- Rolling Animation ---------- */
+
+@keyframes rolling{
+
+    from{
+
+        transform:
+
+        rotateX(0deg)
+
+        rotateY(0deg);
+
+    }
+
+    to{
+
+        transform:
+
+        rotateX(1080deg)
+
+        rotateY(1080deg);
+
+    }
+
+}
+
+.rolling{
+
+    animation:rolling .35s linear infinite;
+
+}
+
+/* ---------- RESULT BOX ---------- */
+
+.resultBox{
+
+    background:#1b1b1b;
+
+    border-radius:15px;
+
+    padding:20px;
+
+    text-align:center;
+
+    margin-bottom:20px;
+
+    border:1px solid #2f2f2f;
+
+}
+
+.resultBox h2{
+
+    color:#f4c542;
+
+    margin-bottom:10px;
+
+}
+
+.resultBox h3{
+
+    color:white;
+
+    font-size:28px;
+
+}
+
+/* ---------- MESSAGE ---------- */
+
+#message{
+
+    text-align:center;
+
+    font-size:20px;
+
+    font-weight:bold;
+
+    min-height:35px;
+
+    margin:20px 0;
+
+}
+
+.win{
+
+    color:#34d058;
+
+}
+
+.lose{
+
+    color:#ff4d4d;
+
+}
+/* ==========================================
+   DICE MASTER V2
+   STYLE.CSS
+   PART 4
+==========================================*/
+
+/* ---------- BET BUTTONS ---------- */
+
+.buttons{
+
+    display:flex;
+
+    gap:15px;
+
+    margin-bottom:20px;
+
+}
+
+.buttons button{
+
+    flex:1;
+
+    padding:16px;
+
+    border:none;
+
+    border-radius:12px;
+
+    font-size:18px;
+
+    font-weight:bold;
+
+    color:white;
+
+    transition:.25s;
+
+}
+
+.even{
+
+    background:#16a34a;
+
+}
+
+.even:hover{
+
+    background:#15803d;
+
+    transform:translateY(-3px);
+
+}
+
+.odd{
+
+    background:#dc2626;
+
+}
+
+.odd:hover{
+
+    background:#b91c1c;
+
+    transform:translateY(-3px);
+
+}
+
+.buttons button:disabled{
+
+    opacity:.5;
+
+    cursor:not-allowed;
+
+}
+
+/* ---------- WALLET ---------- */
+
+.wallet{
+
+    display:flex;
+
+    gap:15px;
+
+    margin-bottom:20px;
+
+}
+
+.wallet button{
+
+    flex:1;
+
+    padding:14px;
+
+    border:none;
+
+    border-radius:10px;
+
+    background:#f4c542;
+
+    color:#111;
+
+    font-size:16px;
+
+    font-weight:bold;
+
+}
+
+.wallet button:hover{
+
+    transform:translateY(-2px);
+
+}
+
+/* ---------- STATS ---------- */
+
+.stats{
+
+    display:flex;
+
+    justify-content:space-between;
+
+    background:#1b1b1b;
+
+    border:1px solid #2f2f2f;
+
+    border-radius:12px;
+
+    padding:18px;
+
+    margin-bottom:20px;
+
+}
+
+.stats div{
+
+    text-align:center;
+
+    flex:1;
+
+}
+
+.stats span{
+
+    display:block;
+
+    margin-top:8px;
+
+    font-size:22px;
+
+    font-weight:bold;
+
+    color:#f4c542;
+
+}
+
+/* ---------- HISTORY ---------- */
+
+.history{
+
+    background:#1b1b1b;
+
+    border:1px solid #2f2f2f;
+
+    border-radius:15px;
+
+    padding:20px;
+
+    margin-bottom:20px;
+
+}
+
+.history h2{
+
+    text-align:center;
+
+    margin-bottom:15px;
+
+    color:#f4c542;
+
+}
+
+#history{
+
+    list-style:none;
+
+    max-height:220px;
+
+    overflow-y:auto;
+
+}
+
+#history li{
+
+    background:#262626;
+
+    margin-bottom:10px;
+
+    padding:12px;
+
+    border-radius:10px;
+
+    transition:.25s;
+
+}
+
+#history li:hover{
+
+    transform:translateX(5px);
+
+}
+
+/* ---------- LOGOUT ---------- */
+
+.logout{
+
+    width:100%;
+
+    padding:14px;
+
+    border:none;
+
+    border-radius:12px;
+
+    background:#444;
+
+    color:white;
+
+    font-size:16px;
+
+    font-weight:bold;
+
+}
+
+.logout:hover{
+
+    background:#666;
+
+}
+
+/* ---------- SCROLLBAR ---------- */
+
+::-webkit-scrollbar{
+
+    width:8px;
+
+}
+
+::-webkit-scrollbar-thumb{
+
+    background:#f4c542;
+
+    border-radius:20px;
+
+}
+
+/* ---------- MOBILE ---------- */
+
+@media(max-width:600px){
+
+.container{
+
+    padding:15px;
+
+}
+
+.dice{
+
+    width:75px;
+
+    height:75px;
+
+}
+
+.dot{
+
+    width:12px;
+
+    height:12px;
+
+}
+
+.dice-area{
+
+    gap:15px;
+
+}
+
+.buttons{
+
+    flex-direction:column;
+
+}
+
+.wallet{
+
+    flex-direction:column;
+
+}
+
+.stats{
+
+    flex-direction:column;
+
+    gap:15px;
+
+}
+
+.topbar{
+
+    flex-direction:column;
+
+    gap:10px;
+
+    text-align:center;
+
+}
+
+}
+
+/* ==========================================
+   WALLET
+========================================== */
+
+.wallet-buttons{
+
+    display:flex;
+
+    gap:12px;
+
+    align-items:center;
+
+}
+
+.wallet-btn{
+
+    background:#18b566;
+
+    color:white;
+
+    border:none;
+
+    padding:10px 18px;
+
+    border-radius:8px;
+
+    font-size:15px;
+
+    font-weight:bold;
+
+    cursor:pointer;
+
+    transition:.25s;
+
+}
+
+.wallet-btn:hover{
+
+    background:#149954;
+
+    transform:translateY(-2px);
+
+}
+
+.logout-btn{
+
+    background:#d83a3a;
+
+    color:white;
+
+    border:none;
+
+    padding:10px 18px;
+
+    border-radius:8px;
+
+    font-size:15px;
+
+    font-weight:bold;
+
+    cursor:pointer;
+
+    transition:.25s;
+
+}
+
+.logout-btn:hover{
+
+    background:#b52828;
+
+}
+
+/* ==========================================
+   MODALS
+========================================== */
+
+.modal{
+
+    position:fixed;
+
+    top:0;
+
+    left:0;
+
+    width:100%;
+
+    height:100%;
+
+    background:rgba(0,0,0,.65);
+
+    display:none;
+
+    justify-content:center;
+
+    align-items:center;
+
+    z-index:999;
+
+}
+
+.modal-content{
+
+    width:360px;
+
+    background:#1b1b1b;
+
+    color:white;
+
+    border-radius:14px;
+
+    padding:30px;
+
+    text-align:center;
+
+    box-shadow:0 20px 50px rgba(0,0,0,.55);
+
+    animation:popup .3s ease;
+
+}
+
+.modal-content h2{
+
+    margin-bottom:20px;
+
+}
+
+.modal-content input{
+
+    width:100%;
+
+    padding:14px;
+
+    margin:10px 0;
+
+    border-radius:8px;
+
+    border:1px solid #444;
+
+    background:#2b2b2b;
+
+    color:white;
+
+    font-size:15px;
+
+    box-sizing:border-box;
+
+}
+
+.modal-content button{
+
+    width:100%;
+
+    margin-top:12px;
+
+    padding:14px;
+
+    border:none;
+
+    border-radius:8px;
+
+    font-size:16px;
+
+    font-weight:bold;
+
+    cursor:pointer;
+
+    transition:.25s;
+
+}
+
+#confirmDeposit{
+
+    background:#18b566;
+
+    color:white;
+
+}
+
+#confirmDeposit:hover{
+
+    background:#149954;
+
+}
+
+#confirmWithdraw{
+
+    background:#ff9800;
+
+    color:white;
+
+}
+
+#confirmWithdraw:hover{
+
+    background:#e48600;
+
+}
+
+#closeDeposit,
+#closeWithdraw{
+
+    background:#444;
+
+    color:white;
+
+}
+
+#closeDeposit:hover,
+#closeWithdraw:hover{
+
+    background:#666;
+
+}
+
+@keyframes popup{
+
+    from{
+
+        transform:scale(.8);
+
+        opacity:0;
+
+    }
+
+    to{
+
+        transform:scale(1);
+
+        opacity:1;
+
+    }
+
+}
+/* ==========================================
+   END OF STYLE.CSS
+========================================== */
