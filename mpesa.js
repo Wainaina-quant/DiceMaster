@@ -21,7 +21,8 @@ async function getAccessToken() {
             {
                 headers: {
                     Authorization: `Basic ${auth}`
-                }
+                },
+                timeout: 30000
             }
         );
 
@@ -29,23 +30,22 @@ async function getAccessToken() {
 
     } catch (error) {
 
-        console.log("========== OAUTH ERROR ==========");
+    console.log("========== OAUTH ERROR ==========");
 
-        if (error.response) {
+    console.log("Message:", error.message);
+    console.log("Code:", error.code);
 
-            console.log(error.response.data);
-
-        } else {
-
-            console.log(error.message);
-
-        }
-
-        console.log("===============================");
-
-        throw error;
-
+    if (error.response) {
+        console.log("Status:", error.response.status);
+        console.log(error.response.data);
     }
+
+    console.log("===============================");
+
+    throw error;
+}
+
+    
 
 }
 
@@ -92,7 +92,8 @@ async function stkPush(phone, amount) {
             {
                 headers: {
                     Authorization: `Bearer ${token}`
-                }
+                },
+                timeout: 30000
             }
         );
 

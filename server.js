@@ -4,6 +4,12 @@ const Database = require("better-sqlite3");
 const bcrypt = require("bcrypt");
 require("dotenv").config();
 
+console.log("Consumer Key:", process.env.MPESA_CONSUMER_KEY ? "FOUND" : "MISSING");
+console.log("Consumer Secret:", process.env.MPESA_CONSUMER_SECRET ? "FOUND" : "MISSING");
+console.log("Shortcode:", process.env.MPESA_SHORTCODE ? "FOUND" : "MISSING");
+console.log("Passkey:", process.env.MPESA_PASSKEY ? "FOUND" : "MISSING");
+console.log("Callback:", process.env.CALLBACK_URL ? process.env.CALLBACK_URL : "MISSING");
+
 const { stkPush } = require("./mpesa");
 const app = express();
 const db = new Database("database.db");
@@ -25,15 +31,19 @@ CREATE TABLE IF NOT EXISTS users(
 
     id INTEGER PRIMARY KEY AUTOINCREMENT,
 
-    username TEXT UNIQUE,
+    phone TEXT UNIQUE,
 
     password TEXT,
+
+    verified INTEGER DEFAULT 0,
 
     balance REAL DEFAULT 1000,
 
     wins INTEGER DEFAULT 0,
 
-    losses INTEGER DEFAULT 0
+    losses INTEGER DEFAULT 0,
+
+    createdAt TEXT
 
 )
 `).run();
@@ -76,101 +86,239 @@ app.get("/", (req,res)=>{
 
 });
 
-// ---------- REGISTER ----------
+// ==========================================
+// REGISTER
+// ==========================================
 
-app.post("/register", async(req,res)=>{
+app.post("/register", async (req, res) => {
 
-    const {username,password}=req.body;
+    const {
 
-    if(!username || !password){
+        phone,
+
+        password,
+
+        confirmPassword
+
+    } = req.body;
+
+    if (!phone || !password || !confirmPassword) {
 
         return res.json({
-            success:false,
-            message:"Fill all fields."
+
+            success: false,
+
+            message: "Fill all fields."
+
         });
 
     }
 
-    const exists=db.prepare(
-        "SELECT * FROM users WHERE username=?"
-    ).get(username);
+    // Kenyan phone validation
 
-    if(exists){
+    if (!/^0(7|1)\d{8}$/.test(phone)) {
 
         return res.json({
-            success:false,
-            message:"Username already exists."
+
+            success: false,
+
+            message: "Enter a valid Kenyan phone number."
+
         });
 
     }
 
-    const hash=await bcrypt.hash(password,10);
+    if (password !== confirmPassword) {
+
+        return res.json({
+
+            success: false,
+
+            message: "Passwords do not match."
+
+        });
+
+    }
+
+    if (password.length < 6) {
+
+        return res.json({
+
+            success: false,
+
+            message: "Password must be at least 6 characters."
+
+        });
+
+    }
+
+    const exists = db.prepare(
+
+        "SELECT * FROM users WHERE phone=?"
+
+    ).get(phone);
+
+    if (exists) {
+
+        return res.json({
+
+            success: false,
+
+            message: "Phone number already registered."
+
+        });
+
+    }
+
+    const hash = await bcrypt.hash(password, 10);
 
     db.prepare(`
-    INSERT INTO users(username,password)
-    VALUES(?,?)
-    `).run(username,hash);
 
-    res.json({
+        INSERT INTO users(
 
-        success:true,
+            phone,
 
-        message:"Registration successful."
+            password,
 
-    });
+            verified,
 
-});
+            createdAt
 
-// ---------- LOGIN ----------
+        )
 
-app.post("/login",async(req,res)=>{
+        VALUES(?,?,?,?)
 
-    const {username,password}=req.body;
+    `).run(
 
-    const user=db.prepare(
-        "SELECT * FROM users WHERE username=?"
-    ).get(username);
+        phone,
 
-    if(!user){
+        hash,
 
-        return res.json({
+        0,
 
-            success:false,
+        new Date().toISOString()
 
-            message:"Invalid username."
-
-        });
-
-    }
-
-    const ok=await bcrypt.compare(
-        password,
-        user.password
     );
 
-    if(!ok){
+    res.json({
+
+        success: true,
+
+        message: "Registration successful."
+
+    });
+
+});
+
+// ==========================================
+// LOGIN
+// ==========================================
+
+app.post("/login", async (req, res) => {
+
+    const { phone, password } = req.body;
+
+    if (!phone || !password) {
 
         return res.json({
 
-            success:false,
+            success: false,
 
-            message:"Wrong password."
+            message: "Fill all fields."
 
         });
 
     }
 
-    req.session.user=user.id;
+    const user = db.prepare(
+
+        "SELECT * FROM users WHERE phone=?"
+
+    ).get(phone);
+
+    if (!user) {
+
+        return res.json({
+
+            success: false,
+
+            message: "Phone number not registered."
+
+        });
+
+    }
+
+    if (user.verified === 0) {
+
+        return res.json({
+
+            success: false,
+
+            message: "Please verify your phone number first."
+
+        });
+
+    }
+
+    const ok = await bcrypt.compare(
+
+        password,
+
+        user.password
+
+    );
+
+    if (!ok) {
+
+        return res.json({
+
+            success: false,
+
+            message: "Wrong password."
+
+        });
+
+    }
+
+    req.session.user = user.id;
 
     res.json({
 
-        success:true,
+        success: true,
 
-        message:"Login successful."
+        message: "Login successful."
 
     });
 
 });
+
+// ==========================================
+// TRANSACTIONS TABLE
+// ==========================================
+
+db.prepare(`
+
+CREATE TABLE IF NOT EXISTS transactions(
+
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+
+    userId INTEGER,
+
+    checkoutRequestId TEXT,
+
+    phone TEXT,
+
+    amount REAL,
+
+    type TEXT,
+
+    status TEXT,
+
+    createdAt TEXT
+
+)
+
+`).run();
 
 // ---------- CURRENT USER ----------
 
@@ -507,6 +655,50 @@ app.post("/deposit", async (req, res) => {
 
         );
 
+        console.log("STK RESPONSE:", response);
+
+        // Save pending transaction
+
+        db.prepare(`
+
+        INSERT INTO transactions(
+
+            userId,
+
+            checkoutRequestId,
+
+            phone,
+
+            amount,
+
+            type,
+
+            status,
+
+            createdAt
+
+        )
+
+        VALUES(?,?,?,?,?,?,?)
+
+        `).run(
+
+            req.session.user,
+
+            response.CheckoutRequestID,
+
+            phone,
+
+            Number(amount),
+
+            "DEPOSIT",
+
+            "PENDING",
+
+            new Date().toISOString()
+
+        );
+
         res.json({
 
             success: true,
@@ -517,15 +709,17 @@ app.post("/deposit", async (req, res) => {
 
         });
 
-    } catch (error) {
+    }
 
-        console.error(error.response?.data || error.message);
+    catch(error){
+
+        console.log(error.response?.data || error.message);
 
         res.json({
 
-            success: false,
+            success:false,
 
-            message: "Failed to send STK Push."
+            message:"Failed to send STK Push."
 
         });
 
@@ -613,6 +807,14 @@ app.post("/api/mpesa/callback", express.json(), (req, res) => {
 
     console.log(JSON.stringify(req.body, null, 2));
 
+    const callback = req.body.Body.stkCallback;
+
+    const checkoutRequestId = callback.CheckoutRequestID;
+
+    const resultCode = callback.ResultCode;
+
+    // Always acknowledge Safaricom immediately
+
     res.json({
 
         ResultCode: 0,
@@ -620,6 +822,78 @@ app.post("/api/mpesa/callback", express.json(), (req, res) => {
         ResultDesc: "Accepted"
 
     });
+
+    // Payment failed
+
+    if (resultCode !== 0) {
+
+        db.prepare(`
+
+        UPDATE transactions
+
+        SET status='FAILED'
+
+        WHERE checkoutRequestId=?
+
+        `).run(checkoutRequestId);
+
+        return;
+
+    }
+
+    // Find pending transaction
+
+    const transaction = db.prepare(`
+
+    SELECT *
+
+    FROM transactions
+
+    WHERE checkoutRequestId=?
+
+    AND status='PENDING'
+
+    `).get(checkoutRequestId);
+
+    if (!transaction) {
+
+        console.log("Transaction already processed or not found.");
+
+        return;
+
+    }
+
+    // Credit wallet
+
+    db.prepare(`
+
+    UPDATE users
+
+    SET balance = balance + ?
+
+    WHERE id=?
+
+    `).run(
+
+        transaction.amount,
+
+        transaction.userId
+
+    );
+
+    // Mark transaction completed
+
+    db.prepare(`
+
+    UPDATE transactions
+
+    SET status='COMPLETED'
+
+    WHERE id=?
+
+    `).run(transaction.id);
+
+    console.log("Wallet credited successfully.");
 
 });
 

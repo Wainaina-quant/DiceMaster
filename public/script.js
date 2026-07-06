@@ -87,19 +87,19 @@ document.getElementById("dice3");
 // LOGIN / REGISTER TABS
 // ==========================================
 
-showLogin.onclick=()=>{
+showLogin.onclick = () => {
 
-loginForm.style.display="block";
+    loginForm.style.display = "block";
 
-registerForm.style.display="none";
+    registerForm.style.display = "none";
 
 };
 
-showRegister.onclick=()=>{
+showRegister.onclick = () => {
 
-loginForm.style.display="none";
+    loginForm.style.display = "none";
 
-registerForm.style.display="block";
+    registerForm.style.display = "block";
 
 };
 
@@ -107,39 +107,52 @@ registerForm.style.display="block";
 // REGISTER
 // ==========================================
 
-registerBtn.onclick=async()=>{
+registerBtn.onclick = async () => {
 
-const username=
-document.getElementById(
-"registerUsername").value;
+    const phone = document
+        .getElementById("registerPhone")
+        .value
+        .trim();
 
-const password=
-document.getElementById(
-"registerPassword").value;
+    const password = document
+        .getElementById("registerPassword")
+        .value;
 
-const response=
-await fetch("/register",{
+    const confirmPassword = document
+        .getElementById("registerConfirmPassword")
+        .value;
 
-method:"POST",
+    const response = await fetch("/register", {
 
-headers:{
-"Content-Type":"application/json"
-},
+        method: "POST",
 
-body:JSON.stringify({
+        headers: {
 
-username,
-password
+            "Content-Type": "application/json"
 
-})
+        },
 
-});
+        body: JSON.stringify({
 
-const data=
-await response.json();
+            phone,
+            password,
+            confirmPassword
 
-authMessage.innerText=
-data.message;
+        })
+
+    });
+
+    const data = await response.json();
+
+    authMessage.innerText = data.message;
+
+    if (data.success) {
+
+        registerForm.style.display = "none";
+
+        loginForm.style.display = "block";
+
+    }
 
 };
 
@@ -147,47 +160,48 @@ data.message;
 // LOGIN
 // ==========================================
 
-loginBtn.onclick=async()=>{
+loginBtn.onclick = async () => {
 
-const username=
-document.getElementById(
-"loginUsername").value;
+    const phone = document
+        .getElementById("loginPhone")
+        .value
+        .trim();
 
-const password=
-document.getElementById(
-"loginPassword").value;
+    const password = document
+        .getElementById("loginPassword")
+        .value;
 
-const response=
-await fetch("/login",{
+    const response = await fetch("/login", {
 
-method:"POST",
+        method: "POST",
 
-headers:{
-"Content-Type":"application/json"
-},
+        headers: {
 
-body:JSON.stringify({
+            "Content-Type": "application/json"
 
-username,
-password
+        },
 
-})
+        body: JSON.stringify({
 
-});
+            phone,
+            password
 
-const data=
-await response.json();
+        })
 
-authMessage.innerText=
-data.message;
+    });
 
-if(data.success){
+    const data = await response.json();
 
-loadUser();
+    authMessage.innerText = data.message;
 
-}
+    if (data.success) {
+
+        loadUser();
+
+    }
 
 };
+
 // ==========================================
 // DICE MASTER V2
 // SCRIPT.JS

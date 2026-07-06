@@ -17,73 +17,84 @@
 
 <div class="container">
 
-    <!-- LOGIN / REGISTER -->
+<!-- LOGIN / REGISTER -->
 
-    <div id="authScreen" class="card">
+<div id="authScreen" class="card">
 
-        <img src="logo.png" class="logo">
+    <img src="logo.png" class="logo">
 
-        <h1>Dice Master</h1>
+    <h1>Dice Master</h1>
 
-        <p class="subtitle">
-            Roll • Predict • Win
-        </p>
+    <p class="subtitle">
+        Roll • Predict • Win
+    </p>
 
-        <div class="tabs">
+    <div class="tabs">
 
-            <button id="showLogin">
-                Login
-            </button>
+        <button id="showLogin">
+            Login
+        </button>
 
-            <button id="showRegister">
-                Register
-            </button>
-
-        </div>
-
-        <div id="loginForm">
-
-            <input
-                id="loginUsername"
-                placeholder="Username">
-
-            <input
-                id="loginPassword"
-                type="password"
-                placeholder="Password">
-
-            <button id="loginBtn">
-
-                LOGIN
-
-            </button>
-
-        </div>
-
-        <div
-            id="registerForm"
-            style="display:none;">
-
-            <input
-                id="registerUsername"
-                placeholder="Username">
-
-            <input
-                id="registerPassword"
-                type="password"
-                placeholder="Password">
-
-            <button id="registerBtn">
-
-                CREATE ACCOUNT
-
-            </button>
-
-        </div>
-
-        <p id="authMessage"></p>
+        <button id="showRegister">
+            Register
+        </button>
 
     </div>
+
+    <!-- LOGIN -->
+
+    <div id="loginForm">
+
+        <input
+            id="loginPhone"
+            type="tel"
+            placeholder="07XXXXXXXX">
+
+        <input
+            id="loginPassword"
+            type="password"
+            placeholder="Password">
+
+        <button id="loginBtn">
+
+            LOGIN
+
+        </button>
+
+    </div>
+
+    <!-- REGISTER -->
+
+    <div
+        id="registerForm"
+        style="display:none;">
+
+        <input
+            id="registerPhone"
+            type="tel"
+            placeholder="07XXXXXXXX">
+
+        <input
+            id="registerPassword"
+            type="password"
+            placeholder="Password">
+
+        <input
+            id="registerConfirmPassword"
+            type="password"
+            placeholder="Confirm Password">
+
+        <button id="registerBtn">
+
+            CREATE ACCOUNT
+
+        </button>
+
+    </div>
+
+    <p id="authMessage"></p>
+
+</div>
 
     <!-- GAME -->
 
