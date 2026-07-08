@@ -23,6 +23,8 @@ console.log("Consumer Secret:", process.env.MPESA_CONSUMER_SECRET ? "FOUND" : "M
 console.log("Shortcode:", process.env.MPESA_SHORTCODE ? "FOUND" : "MISSING");
 console.log("Passkey:", process.env.MPESA_PASSKEY ? "FOUND" : "MISSING");
 console.log("Callback:", process.env.CALLBACK_URL ? process.env.CALLBACK_URL : "MISSING");
+console.log("BusinessShortCode:", shortcode);
+console.log("Passkey length:", passkey ? passkey.length : 0);
 
 const { stkPush } = require("./mpesa");
 const app = express();
