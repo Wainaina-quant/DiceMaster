@@ -4,6 +4,20 @@ const Database = require("better-sqlite3");
 const bcrypt = require("bcrypt");
 require("dotenv").config();
 
+// ==========================================
+// GENERATE OTP
+// ==========================================
+
+function generateOTP(){
+
+    return Math.floor(
+
+        100000 + Math.random() * 900000
+
+    ).toString();
+
+}
+
 console.log("Consumer Key:", process.env.MPESA_CONSUMER_KEY ? "FOUND" : "MISSING");
 console.log("Consumer Secret:", process.env.MPESA_CONSUMER_SECRET ? "FOUND" : "MISSING");
 console.log("Shortcode:", process.env.MPESA_SHORTCODE ? "FOUND" : "MISSING");
@@ -93,37 +107,26 @@ app.get("/", (req,res)=>{
 app.post("/register", async (req, res) => {
 
     const {
-
         phone,
-
         password,
-
         confirmPassword
-
     } = req.body;
 
     if (!phone || !password || !confirmPassword) {
 
         return res.json({
-
             success: false,
-
             message: "Fill all fields."
-
         });
 
     }
 
     // Kenyan phone validation
-
     if (!/^0(7|1)\d{8}$/.test(phone)) {
 
         return res.json({
-
             success: false,
-
             message: "Enter a valid Kenyan phone number."
-
         });
 
     }
@@ -131,11 +134,8 @@ app.post("/register", async (req, res) => {
     if (password !== confirmPassword) {
 
         return res.json({
-
             success: false,
-
             message: "Passwords do not match."
-
         });
 
     }
@@ -143,29 +143,21 @@ app.post("/register", async (req, res) => {
     if (password.length < 6) {
 
         return res.json({
-
             success: false,
-
             message: "Password must be at least 6 characters."
-
         });
 
     }
 
     const exists = db.prepare(
-
         "SELECT * FROM users WHERE phone=?"
-
     ).get(phone);
 
     if (exists) {
 
         return res.json({
-
             success: false,
-
             message: "Phone number already registered."
-
         });
 
     }
@@ -173,39 +165,23 @@ app.post("/register", async (req, res) => {
     const hash = await bcrypt.hash(password, 10);
 
     db.prepare(`
-
         INSERT INTO users(
-
             phone,
-
             password,
-
             verified,
-
             createdAt
-
         )
-
         VALUES(?,?,?,?)
-
     `).run(
-
         phone,
-
         hash,
-
-        0,
-
+        1,
         new Date().toISOString()
-
     );
 
     res.json({
-
         success: true,
-
-        message: "Registration successful."
-
+        message: "Registration successful. You can now log in."
     });
 
 });
@@ -243,18 +219,6 @@ app.post("/login", async (req, res) => {
             success: false,
 
             message: "Phone number not registered."
-
-        });
-
-    }
-
-    if (user.verified === 0) {
-
-        return res.json({
-
-            success: false,
-
-            message: "Please verify your phone number first."
 
         });
 
@@ -315,6 +279,26 @@ CREATE TABLE IF NOT EXISTS transactions(
     status TEXT,
 
     createdAt TEXT
+
+)
+
+`).run();
+
+// ==========================================
+// OTP TABLE
+// ==========================================
+
+db.prepare(`
+
+CREATE TABLE IF NOT EXISTS otp_codes(
+
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+
+    phone TEXT,
+
+    code TEXT,
+
+    expiresAt TEXT
 
 )
 
