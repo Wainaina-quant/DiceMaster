@@ -306,23 +306,23 @@ CREATE TABLE IF NOT EXISTS otp_codes(
 
 // ---------- CURRENT USER ----------
 
-app.get("/me",(req,res)=>{
+app.get("/me", (req, res) => {
 
-    if(!req.session.user){
+    if (!req.session.user) {
 
         return res.status(401).end();
 
     }
 
-    const user=db.prepare(`
-    SELECT
-    id,
-    username,
-    balance,
-    wins,
-    losses
-    FROM users
-    WHERE id=?
+    const user = db.prepare(`
+        SELECT
+            id,
+            phone,
+            balance,
+            wins,
+            losses
+        FROM users
+        WHERE id=?
     `).get(req.session.user);
 
     res.json(user);

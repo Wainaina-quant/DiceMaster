@@ -245,7 +245,7 @@ async function loadUser(){
     gameScreen.style.display="block";
 
     playerName.innerText=
-    user.username;
+    user.phone;
 
     balance.innerText=
     Number(user.balance).toFixed(2);
