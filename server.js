@@ -28,6 +28,11 @@ console.log("Callback:", process.env.CALLBACK_URL ? process.env.CALLBACK_URL : "
 const { stkPush } = require("./mpesa");
 const app = express();
 const db = new Database("database.db");
+const columns = db.prepare("PRAGMA table_info(users)").all();
+
+console.log("========== USERS TABLE ==========");
+console.table(columns);
+console.log("=================================");
 
 app.use(express.json());
 
@@ -40,6 +45,8 @@ app.use(session({
 }));
 
 // ---------- DATABASE ----------
+
+db.prepare("DROP TABLE IF EXISTS users").run();
 
 db.prepare(`
 CREATE TABLE IF NOT EXISTS users(

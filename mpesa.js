@@ -72,6 +72,12 @@ async function stkPush(phone, amount) {
         timestamp
     ).toString("base64");
 
+     console.log("========== STK REQUEST ==========");
+     console.log("ShortCode:", shortcode);
+     console.log("Passkey:", passkey ? "FOUND" : "MISSING");
+     console.log("Callback:", process.env.CALLBACK_URL);
+     console.log("=================================");
+
     try {
 
         const response = await axios.post(
